@@ -5,10 +5,11 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import '../lib/user_holder.dart';
-import '../lib/models/user.dart';
+import 'package:flutter_test/flutter_test.dart'
+    show expect, group, isA, setUp, tearDownAll, test, throwsA;
 
-import 'package:flutter_test/flutter_test.dart';
+import '../lib/models/user.dart';
+import '../lib/user_holder.dart';
 
 void main() {
   UserHolder holder;
@@ -33,7 +34,6 @@ void main() {
   test('getUserByLogin', () {
     User user = User(
         name: "Dan Tot", phone: "+15750761449", email: "dan.tot@yandex.ru");
-
     holder.users[user.login] = user;
 
     expect(user.login, holder.getUserByLogin(user.login).login);

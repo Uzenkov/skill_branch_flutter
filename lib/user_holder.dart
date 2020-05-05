@@ -8,31 +8,32 @@ class UserHolder {
 
     print(user.toString());
 
-    if (!users.containsKey(user.login)) {
+    if (!users.containsKey(user.login))
       users[user.login] = user;
-    } else {
+    else
       throw Exception("A user with this name already exists");
-    }
   }
 
   User registerUserByPhone(String name, String phone) {
     User user = User(name: name, phone: phone);
-    if (!users.containsKey(user.login)) {
+
+    if (!users.containsKey(user.login))
       users[user.login] = user;
-      return user;
-    } else {
+    else
       throw Exception("A user with this name already exists");
-    }
+
+    return user;
   }
 
   User registerUserByEmail(String name, String email) {
     User user = User(name: name, email: email);
-    if (!users.containsKey(user.login)) {
+
+    if (!users.containsKey(user.login))
       users[user.login] = user;
-      return user;
-    } else {
+    else
       throw Exception("A user with this name already exists");
-    }
+
+    return user;
   }
 
   void setFriends(String login, List<User> friends) {
@@ -54,11 +55,11 @@ class UserHolder {
   }
 
   List<User> importUsers(List<String> strings) {
-    List<User> users = List();
+    List<User> users = <User>[];
     if (strings.isNotEmpty) {
       strings.forEach((string) => users.add(splitString(string)));
     }
-    return users;
+    return users.toList();
   }
 
   User splitString(String string) {
