@@ -6,7 +6,7 @@ import '../res/res.dart';
 class Photo extends StatelessWidget {
   Photo({Key key, this.photoLink}) : super(key: key);
 
-  final photoLink;
+  final String photoLink;
 
   @override
   Widget build(BuildContext context) {

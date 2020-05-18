@@ -22,7 +22,7 @@ class _FeedState extends State<Feed> {
           itemBuilder: (BuildContext context, int index) {
             return Column(
               children: <Widget>[
-                _buildItem(),
+                _buildItem(index),
                 Divider(
                   thickness: 2,
                   color: AppColors.mercury,
@@ -33,7 +33,7 @@ class _FeedState extends State<Feed> {
         ),
       );
 
-  Widget _buildItem() => Column(
+  Widget _buildItem(int index) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           GestureDetector(
@@ -46,12 +46,16 @@ class _FeedState extends State<Feed> {
                     altDescription: 'This is the Flutter\'s logo',
                     name: 'Kirill Adeshchenko',
                     userName: 'kaparray',
+                    heroTag: 'heroTag-$index',
                   ),
                 ),
               );
             },
-            child: Photo(
-              photoLink: kFlutterDash,
+            child: Hero(
+              tag: 'heroTag-$index',
+              child: Photo(
+                photoLink: kFlutterDash,
+              ),
             ),
           ),
           _buildPhotoMeta(),

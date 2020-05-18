@@ -10,6 +10,7 @@ class FullScreenImage extends StatefulWidget {
     this.altDescription = '',
     this.name = '',
     this.userName = '',
+    this.heroTag = '',
     Key key,
   }) : super(key: key);
 
@@ -17,12 +18,59 @@ class FullScreenImage extends StatefulWidget {
   final String altDescription;
   final String name;
   final String userName;
+  final String heroTag;
 
   @override
   _FullScreenImageState createState() => _FullScreenImageState();
 }
 
-class _FullScreenImageState extends State<FullScreenImage> {
+class _FullScreenImageState extends State<FullScreenImage>
+    with SingleTickerProviderStateMixin {
+  AnimationController animationController;
+  Animation<double> avatarOpacity;
+  Animation<double> userInfoOpacity;
+
+  @override
+  void initState() {
+    super.initState();
+
+    animationController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..forward();
+
+    avatarOpacity = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Interval(
+          0,
+          0.5,
+          curve: Curves.ease,
+        ),
+      ),
+    );
+
+    userInfoOpacity = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Interval(
+          0.5,
+          1,
+          curve: Curves.ease,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,8 +86,9 @@ class _FullScreenImageState extends State<FullScreenImage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Photo(
-            photoLink: widget.photo,
+          Hero(
+            tag: widget.heroTag,
+            child: Photo(photoLink: widget.photo),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
@@ -57,35 +106,47 @@ class _FullScreenImageState extends State<FullScreenImage> {
     );
   }
 
-  Widget _buildPhotoMeta(String name, String nikName) {
+  Widget _buildPhotoMeta(String name, String username) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: <Widget>[
-              UserAvatar('https://skill-branch.ru/img/speakers/Adechenko.jpg'),
-              SizedBox(width: 6),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: AnimatedBuilder(
+        animation: animationController,
+        builder: (context, child) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
                 children: <Widget>[
-                  Text(
-                    name != null ? name : '',
-                    style: AppStyles.h1Black,
+                  Opacity(
+                    opacity: avatarOpacity.value,
+                    child: UserAvatar(
+                        'https://skill-branch.ru/img/speakers/Adechenko.jpg'),
                   ),
-                  Text(
-                    nikName != null ? '@${nikName}' : '',
-                    style: AppStyles.h5Black.copyWith(
-                      color: AppColors.manatee,
+                  SizedBox(width: 6),
+                  Opacity(
+                    opacity: userInfoOpacity.value,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          name != null ? name : '',
+                          style: AppStyles.h1Black,
+                        ),
+                        Text(
+                          username != null ? '@${username}' : '',
+                          style: AppStyles.h5Black.copyWith(
+                            color: AppColors.manatee,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
