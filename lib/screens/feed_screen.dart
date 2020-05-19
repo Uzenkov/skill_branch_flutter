@@ -46,6 +46,8 @@ class _FeedState extends State<Feed> {
                     altDescription: 'This is the Flutter\'s logo',
                     name: 'Kirill Adeshchenko',
                     userName: 'kaparray',
+                    userPhoto:
+                        'https://skill-branch.ru/img/speakers/Adechenko.jpg',
                     heroTag: 'heroTag-$index',
                   ),
                 ),

@@ -10,6 +10,7 @@ class FullScreenImage extends StatefulWidget {
     this.altDescription = '',
     this.name = '',
     this.userName = '',
+    this.userPhoto,
     this.heroTag = '',
     Key key,
   }) : super(key: key);
@@ -18,6 +19,7 @@ class FullScreenImage extends StatefulWidget {
   final String altDescription;
   final String name;
   final String userName;
+  final String userPhoto;
   final String heroTag;
 
   @override
@@ -119,8 +121,7 @@ class _FullScreenImageState extends State<FullScreenImage>
                 children: <Widget>[
                   Opacity(
                     opacity: avatarOpacity.value,
-                    child: UserAvatar(
-                        'https://skill-branch.ru/img/speakers/Adechenko.jpg'),
+                    child: UserAvatar(widget.userPhoto),
                   ),
                   SizedBox(width: 6),
                   Opacity(
@@ -134,7 +135,7 @@ class _FullScreenImageState extends State<FullScreenImage>
                           style: AppStyles.h1Black,
                         ),
                         Text(
-                          username != null ? '@${username}' : '',
+                          username != null ? '@$username' : '',
                           style: AppStyles.h5Black.copyWith(
                             color: AppColors.manatee,
                           ),
