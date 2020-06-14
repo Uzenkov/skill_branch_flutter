@@ -67,7 +67,10 @@ class _FeedState extends State<Feed> {
               'This is the Flutter\'s logo',
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: AppStyles.h3.copyWith(color: AppColors.black),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline3
+                  .copyWith(color: AppColors.black),
             ),
           ),
         ],
@@ -87,9 +90,12 @@ class _FeedState extends State<Feed> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Kirill Adeshchenko', style: AppStyles.h2Black),
+                    Text('Kirill Adeshchenko',
+                        style: Theme.of(context).textTheme.headline2),
                     Text('@kaparray',
-                        style: AppStyles.h5Black
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline5
                             .copyWith(color: AppColors.manatee)),
                   ],
                 ),

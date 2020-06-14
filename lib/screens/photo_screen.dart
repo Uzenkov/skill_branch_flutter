@@ -98,7 +98,7 @@ class _FullScreenImageState extends State<FullScreenImage>
               widget.altDescription,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: AppStyles.h3,
+              style: Theme.of(context).textTheme.headline3,
             ),
           ),
           _buildPhotoMeta(widget.name, widget.userName),
@@ -132,13 +132,13 @@ class _FullScreenImageState extends State<FullScreenImage>
                       children: <Widget>[
                         Text(
                           name != null ? name : '',
-                          style: AppStyles.h1Black,
+                          style: Theme.of(context).textTheme.headline1,
                         ),
                         Text(
                           username != null ? '@$username' : '',
-                          style: AppStyles.h5Black.copyWith(
-                            color: AppColors.manatee,
-                          ),
+                          style: Theme.of(context).textTheme.headline5.copyWith(
+                                color: AppColors.manatee,
+                              ),
                         ),
                       ],
                     ),
@@ -201,10 +201,10 @@ class Button extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Text(
               text,
-              style: AppStyles.h5Black.copyWith(
-                color: AppColors.white,
-                fontWeight: FontWeight.w500,
-              ),
+              style: Theme.of(context).textTheme.headline5.copyWith(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
             ),
           ),
         ),
