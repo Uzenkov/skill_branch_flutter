@@ -38,20 +38,33 @@ class _FeedState extends State<Feed> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => FullScreenImage(
-                    photo: kFlutterDash,
-                    altDescription: 'This is the Flutter\'s logo',
-                    name: 'Kirill Adeshchenko',
-                    userName: 'kaparray',
-                    userPhoto:
-                        'https://skill-branch.ru/img/speakers/Adechenko.jpg',
-                    heroTag: 'heroTag-$index',
-                  ),
+                '/fullScreenImage',
+                arguments: FullScreenImageArguments(
+                  photo: kFlutterDash,
+                  altDescription: 'This is the Flutter\'s logo',
+                  name: 'Kirill Adeshchenko',
+                  userName: 'kaparray',
+                  userPhoto:
+                      'https://skill-branch.ru/img/speakers/Adechenko.jpg',
+                  heroTag: 'heroTag-$index',
                 ),
               );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => FullScreenImage(
+              //       photo: kFlutterDash,
+              //       altDescription: 'This is the Flutter\'s logo',
+              //       name: 'Kirill Adeshchenko',
+              //       userName: 'kaparray',
+              //       userPhoto:
+              //           'https://skill-branch.ru/img/speakers/Adechenko.jpg',
+              //       heroTag: 'heroTag-$index',
+              //     ),
+              //   ),
+              // );
             },
             child: Hero(
               tag: 'heroTag-$index',

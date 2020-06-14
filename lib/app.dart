@@ -1,3 +1,4 @@
+import 'package:FlutterGalleryApp/screens/photo_screen.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,44 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppStyles.buildAppTextTheme(),
       home: Home(Connectivity().onConnectivityChanged),
+      onGenerateRoute: (RouteSettings settings) {
+        if (settings.name == '/fullScreenImage') {
+          FullScreenImageArguments args =
+              (settings.arguments as FullScreenImageArguments);
+          final route = FullScreenImage(
+            photo: args.photo,
+            altDescription: args.altDescription,
+            name: args.name,
+            userName: args.userName,
+            userPhoto: args.userPhoto,
+            heroTag: args.heroTag,
+          );
+
+          return MaterialPageRoute(
+              builder: (context) => route, settings: args.settings);
+        }
+      },
+      onUnknownRoute: (RouteSettings settings) {
+        return MaterialPageRoute(builder: (BuildContext context) {
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '404',
+                    style: Theme.of(context).textTheme.headline2,
+                  ),
+                  Text(
+                    'Page not found',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+      },
     );
   }
 }

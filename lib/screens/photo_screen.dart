@@ -5,7 +5,36 @@ import 'package:gallery_saver/gallery_saver.dart';
 import '../res/res.dart';
 import '../widgets/widgets.dart';
 
+class FullScreenImageArguments {
+  final Key key;
+  final String photo;
+  final String altDescription;
+  final String name;
+  final String userName;
+  final String userPhoto;
+  final String heroTag;
+  final RouteSettings settings;
+
+  FullScreenImageArguments({
+    this.key,
+    this.photo,
+    this.altDescription,
+    this.name,
+    this.userName,
+    this.userPhoto,
+    this.heroTag,
+    this.settings,
+  });
+}
+
 class FullScreenImage extends StatefulWidget {
+  final String photo;
+  final String altDescription;
+  final String name;
+  final String userName;
+  final String userPhoto;
+  final String heroTag;
+
   FullScreenImage({
     this.photo = '',
     this.altDescription = '',
@@ -15,13 +44,6 @@ class FullScreenImage extends StatefulWidget {
     this.heroTag = '',
     Key key,
   }) : super(key: key);
-
-  final String photo;
-  final String altDescription;
-  final String name;
-  final String userName;
-  final String userPhoto;
-  final String heroTag;
 
   @override
   _FullScreenImageState createState() => _FullScreenImageState();
@@ -194,12 +216,10 @@ class _FullScreenImageState extends State<FullScreenImage>
                       onPressed: () async {
                         GallerySaver.saveImage(widget.photo).then(
                           (bool success) {
-                            // this statement does not work
                             setState(() {});
                             Navigator.pop(context);
                           },
                         );
-                        Navigator.pop(context);
                       },
                     ),
                     FlatButton(
