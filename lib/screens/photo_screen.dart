@@ -84,6 +84,18 @@ class _FullScreenImageState extends State<FullScreenImage>
           },
           icon: Icon(CupertinoIcons.back),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ClaimBottomSheet();
+                  });
+            },
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
