@@ -26,6 +26,7 @@ dependencies:
   cupertino_icons: ^0.1.2
 
   cached_network_image: ^2.2.0+1
+  gallery_saver: ^2.0.1
 
 dev_dependencies:
   flutter_test:

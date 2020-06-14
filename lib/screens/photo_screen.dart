@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 import '../res/res.dart';
 import '../widgets/widgets.dart';
@@ -181,7 +182,35 @@ class _FullScreenImageState extends State<FullScreenImage>
           child: Button(
             color: AppColors.dodgerBlue,
             text: 'Save',
-            onPress: () {},
+            onPress: () {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: new Text("Downloading photos"),
+                  content: new Text("Are you sure you want to upload a photo?"),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('Download'),
+                      onPressed: () async {
+                        // GallerySaver.saveImage(widget.photo).then(
+                        //   (bool success) {
+                        //     setState(() {});
+                        //     Navigator.pop(context);
+                        //   },
+                        // );
+                        Navigator.pop(context);
+                      },
+                    ),
+                    FlatButton(
+                      child: Text('Close'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
         Expanded(
