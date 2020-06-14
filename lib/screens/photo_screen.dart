@@ -192,12 +192,13 @@ class _FullScreenImageState extends State<FullScreenImage>
                     FlatButton(
                       child: Text('Download'),
                       onPressed: () async {
-                        // GallerySaver.saveImage(widget.photo).then(
-                        //   (bool success) {
-                        //     setState(() {});
-                        //     Navigator.pop(context);
-                        //   },
-                        // );
+                        GallerySaver.saveImage(widget.photo).then(
+                          (bool success) {
+                            // this statement does not work
+                            setState(() {});
+                            Navigator.pop(context);
+                          },
+                        );
                         Navigator.pop(context);
                       },
                     ),

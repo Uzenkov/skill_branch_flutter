@@ -1,15 +1,24 @@
+import 'dart:async';
+
+import 'package:FlutterGalleryApp/app.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 
 import '../res/res.dart';
 import '../screens/feed_screen.dart';
 
 class Home extends StatefulWidget {
+  final Stream<ConnectivityResult> onConnectivityChanged;
+
+  Home(this.onConnectivityChanged);
+
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   int currentTab = 0;
+  StreamSubscription subscription;
   final PageStorageBucket bucket = PageStorageBucket();
 
   final List<Widget> pages = [
@@ -23,6 +32,32 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     BottomNavyBarItem(title: const Text('Search')),
     BottomNavyBarItem(title: const Text('User')),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    subscription =
+        widget.onConnectivityChanged.listen((ConnectivityResult result) {
+      switch (result) {
+        case ConnectivityResult.wifi:
+          ConnectivityOverlay().removeOverlay(context);
+          break;
+        case ConnectivityResult.mobile:
+          ConnectivityOverlay().removeOverlay(context);
+          break;
+        case ConnectivityResult.none:
+          ConnectivityOverlay().showOverlay(context);
+          break;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
