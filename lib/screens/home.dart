@@ -47,7 +47,22 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ConnectivityOverlay().removeOverlay(context);
           break;
         case ConnectivityResult.none:
-          ConnectivityOverlay().showOverlay(context);
+          Widget widget = Center(
+            child: Material(
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                color: Colors.redAccent,
+                child: Text(
+                  'No internet connection',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          );
+          ConnectivityOverlay().showOverlay(context, widget);
           break;
       }
     });

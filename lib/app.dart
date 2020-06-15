@@ -10,7 +10,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: AppStyles.buildAppTextTheme(),
+      theme: ThemeData(
+        textTheme: buildAppTextTheme(),
+      ),
       home: Home(Connectivity().onConnectivityChanged),
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == '/fullScreenImage') {
@@ -63,31 +65,14 @@ class ConnectivityOverlay {
 
   ConnectivityOverlay._internal();
 
-  static OverlayEntry overlayEntry = OverlayEntry(
-    builder: (context) {
-      return Center(
-        child: Material(
-          child: Container(
-            padding: const EdgeInsets.all(8.0),
-            color: Colors.redAccent,
-            child: Text(
-              'No internet connection',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-      );
-    },
-  );
+  static OverlayEntry overlayEntry;
 
-  void showOverlay(BuildContext context) {
-    return Overlay.of(context).insert(overlayEntry);
+  void showOverlay(BuildContext context, Widget child) {
+    overlayEntry = OverlayEntry(builder: (context) => child);
+    Overlay.of(context).insert(overlayEntry);
   }
 
   void removeOverlay(BuildContext context) {
-    overlayEntry.remove();
+    if (overlayEntry != null) overlayEntry.remove();
   }
 }
