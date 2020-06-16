@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class ClaimBottomSheet extends StatelessWidget {
   final List<String> categories = [
-    'adult',
-    'harm',
-    'bully',
-    'spam',
-    'copyright',
-    'hate',
+    'ADULT',
+    'HARM',
+    'BULLY',
+    'SPAM',
+    'COPYRIGHT',
+    'HATE',
   ];
 
   @override
