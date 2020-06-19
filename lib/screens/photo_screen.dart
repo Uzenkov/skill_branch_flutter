@@ -1,0 +1,279 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+
+import '../res/res.dart';
+import '../widgets/widgets.dart';
+
+class FullScreenImageArguments {
+  final Key key;
+  final String photo;
+  final String altDescription;
+  final String name;
+  final String userName;
+  final String userPhoto;
+  final String heroTag;
+  final RouteSettings settings;
+
+  FullScreenImageArguments({
+    this.key,
+    this.photo,
+    this.altDescription,
+    this.name,
+    this.userName,
+    this.userPhoto,
+    this.heroTag,
+    this.settings,
+  });
+}
+
+class FullScreenImage extends StatefulWidget {
+  final String photo;
+  final String altDescription;
+  final String name;
+  final String userName;
+  final String userPhoto;
+  final String heroTag;
+
+  FullScreenImage({
+    this.photo = '',
+    this.altDescription = '',
+    this.name = '',
+    this.userName = '',
+    this.userPhoto,
+    this.heroTag = '',
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _FullScreenImageState createState() => _FullScreenImageState();
+}
+
+class _FullScreenImageState extends State<FullScreenImage>
+    with SingleTickerProviderStateMixin {
+  AnimationController animationController;
+  Animation<double> avatarOpacity;
+  Animation<double> userInfoOpacity;
+
+  @override
+  void initState() {
+    super.initState();
+
+    animationController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..forward();
+
+    avatarOpacity = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Interval(
+          0,
+          0.5,
+          curve: Curves.ease,
+        ),
+      ),
+    );
+
+    userInfoOpacity = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Interval(
+          0.5,
+          1,
+          curve: Curves.ease,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Photo'),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(CupertinoIcons.back),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ClaimBottomSheet();
+                  });
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Hero(
+            tag: widget.heroTag,
+            child: Photo(photoLink: widget.photo),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+            child: Text(
+              widget.altDescription,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.headline3,
+            ),
+          ),
+          _buildPhotoMeta(widget.name, widget.userName),
+          _buildLikeAndButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPhotoMeta(String name, String username) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: AnimatedBuilder(
+        animation: animationController,
+        builder: (context, child) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: <Widget>[
+                  Opacity(
+                    opacity: avatarOpacity.value,
+                    child: UserAvatar(widget.userPhoto),
+                  ),
+                  SizedBox(width: 6),
+                  Opacity(
+                    opacity: userInfoOpacity.value,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          name != null ? name : '',
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
+                        Text(
+                          username != null ? '@$username' : '',
+                          style: Theme.of(context).textTheme.headline5.copyWith(
+                                color: AppColors.manatee,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildLikeAndButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          child: Center(
+            child: LikeButton(
+              likeCount: 10,
+              isLiked: true,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Button(
+            color: AppColors.dodgerBlue,
+            text: 'Save',
+            onPress: () {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: new Text("Downloading photos"),
+                  content: new Text("Are you sure you want to upload a photo?"),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('Download'),
+                      onPressed: () async {
+                        GallerySaver.saveImage(widget.photo).then(
+                          (bool success) {
+                            setState(() {});
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                    ),
+                    FlatButton(
+                      child: Text('Close'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        Expanded(
+          child: Button(
+            color: AppColors.dodgerBlue,
+            text: 'Visit',
+            onPress: () {},
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class Button extends StatelessWidget {
+  final Color color;
+  final String text;
+  final Function onPress;
+
+  Button({@required this.color, this.text, this.onPress});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPress,
+      child: Container(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              text,
+              style: Theme.of(context).textTheme.headline5.copyWith(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+        ),
+        margin: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+            color: color, borderRadius: BorderRadius.circular(10.0)),
+      ),
+    );
+  }
+}
